@@ -12,7 +12,7 @@ function createFeatures(earthquakeData) {
   // Give each feature a popup that describes the place and time of the earthquake.
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
-  };
+  }
 
     // Create a GeoJSON layer containing the features array on the earthquakeData object
     function createCircleMarker(feature){
@@ -54,14 +54,9 @@ function createFeatures(earthquakeData) {
 
         // let latlng = L.latlng([feature.geometry.coordinates[1],feature.geometry.coordinates[0]])
 
-        // Add earthquake data to the map
-    L.geoJson(data), {
-
-        pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng);
-        },
+        
     
-        // return L.circleMarker(options);
+        return L.circleMarker(options);
     }
 
 
@@ -128,6 +123,5 @@ legend.onAdd = function() {
   return div;
 };
 legend.addTo(myMap)
-};
 }
 

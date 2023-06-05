@@ -6,6 +6,28 @@ d3.json(queryUrl).then(function (data) {
 createFeatures(data.features);
 });
 
+function chooseColor (depth){
+    if (depth >= 90){
+        return "FF5F65";
+    }
+    else if (depth >= 70){
+        return "#FCA35D";
+    }
+    else if (depth >= 50){
+        return "FDB72A";
+    }
+    else if (depth >= 30){
+        return "#F7DB11";
+    }
+    else if (depth >= 10){
+        return "#DCF400";
+    }
+    else {
+        return "#A3F600";
+    } 
+              
+
+};
 function createFeatures(earthquakeData) {
 
   // Define a function that we want to run once for each feature in the features array.
@@ -15,48 +37,18 @@ function createFeatures(earthquakeData) {
   }
 
     // Create a GeoJSON layer containing the features array on the earthquakeData object
-    function createCircleMarker(feature){
-        function chooseColor (depth){
-            if (depth >= 90){
-                return "FF5F65";
-            }
-            else if (depth >= 70){
-                return "#FCA35D";
-            }
-            else if (depth >= 50){
-                return "FDB72A";
-            }
-            else if (depth >= 30){
-                return "#F7DB11";
-            }
-            else if (depth >= 10){
-                return "#DCF400";
-            }
-            else {
-                return "#A3F600";
-            } 
-                      
-
-        };
+    function createCircleMarker(feature, latlng){
+        
         let options = {
         radius:feature.properties.mag*5,
         fillColor: chooseColor(feature.geometry.coordinates[2]),
-        color: chooseColor(feature.geometry.coordinates[2]),
+        color: "black",
         weight: 1,
-        opacity: 0.8,
-        fillOpacity: 0.35
+        opacity: 0.50,
+        fillOpacity: 0.75
         };
     
-        // function latlng (coordinate) {
-        //     (feature.geometry.coordinates[1],
-        //     feature.geometry.coordinates[0]) 
-        // }
-
-        // let latlng = L.latlng([feature.geometry.coordinates[1],feature.geometry.coordinates[0]])
-
-        
-    
-        return L.circleMarker(options);
+        return L.circleMarker(latlng, options);
     }
 
 

@@ -8,13 +8,13 @@ createFeatures(data.features);
 
 function chooseColor (depth){
     if (depth >= 90){
-        return "FF5F65";
+        return "#FF5F65";
     }
     else if (depth >= 70){
         return "#FCA35D";
     }
     else if (depth >= 50){
-        return "FDB72A";
+        return "#FDB72A";
     }
     else if (depth >= 30){
         return "#F7DB11";
@@ -33,14 +33,14 @@ function createFeatures(earthquakeData) {
   // Define a function that we want to run once for each feature in the features array.
   // Give each feature a popup that describes the place and time of the earthquake.
   function onEachFeature(feature, layer) {
-    layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
+    layer.bindPopup(`<h3>Magnitude ${feature.properties.mag},${feature.properties.place} </h3><hr><p>${new Date(feature.properties.time)}</p>`);
   }
 
     // Create a GeoJSON layer containing the features array on the earthquakeData object
     function createCircleMarker(feature, latlng){
         
         let options = {
-        radius:feature.properties.mag*5,
+        radius:feature.properties.mag*3,
         fillColor: chooseColor(feature.geometry.coordinates[2]),
         color: "black",
         weight: 1,
@@ -102,18 +102,29 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
-  // Add the legend for depth
-var legend = L.control({position: "bottomright"});
-legend.onAdd = function() {
-  var div = L.DomUtil.create("div", "info legend"),
-  depth = [-10, 10, 30, 50, 70, 90];
 
-  for (var i = 0; i < depth.length; i++) {
-    div.innerHTML +=
-    '<i style="background:' + chooseColor(depth[i] + 1) + '"></i> ' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
-  }
-  return div;
-};
-legend.addTo(myMap)
+// Create map legend to provide context for map data
+let legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function() {
+    var div = L.DomUtil.create('div', 'info legend');
+    depth = [-10, 10, 30, 50, 70, 90];
+    var labels = [];
+    var legendInfo = "<h4>Depth</h4>";
+
+    div.innerHTML = legendInfo
+
+    // go through each depth item to label and color the legend
+    // push to labels array as list item
+    for (var i = 0; i < depth.length; i++) {
+          labels.push('<ul style="background-color:' + chooseColor(depth[i] + 1) + '"> <span>' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '' : '+') + '</span></ul>');
+        }
+
+      // add each label list item to the div under the <ul> tag
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    
+    return div;
+  };
+  legend.addTo(myMap)
 }
 
